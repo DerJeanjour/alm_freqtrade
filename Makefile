@@ -29,4 +29,4 @@ download-data-example:
 # - pairlists method should be { "method": "StaticPairList" } and delete VolumePairList entry
 # - exchange.pair_whitelist should be including the historic data, like: ["ETH/USDT","BTC/USDT"]
 backtest-data-example:
-	docker compose run --rm freqtrade backtesting --config user_data/config.json --pairs ETH/USDT BTC/USDT --strategy SampleStrategy -i 5m
+	docker compose run --rm freqtrade backtesting --config user_data/config.json --pairs ETH/USDT BTC/USDT --strategy AlmStrategy -i 5m
