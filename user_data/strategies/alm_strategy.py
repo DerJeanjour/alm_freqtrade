@@ -59,10 +59,12 @@ class AlmStrategy(IStrategy):
         return []
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        print("populate_indicators ...")
         dataframe['rsi'] = ta.RSI(dataframe)
         return dataframe
 
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        print("populate_entry_trend ...")
         dataframe.loc[
             (
                 (dataframe['rsi'] < 30)
@@ -71,9 +73,10 @@ class AlmStrategy(IStrategy):
         return dataframe
 
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        print("populate_exit_trend ...")
         dataframe.loc[
             (
                 (dataframe['rsi'] > 70)
             ),
-            'exit_short'] = 1
+            'exit_long'] = 1
         return dataframe
