@@ -5,11 +5,13 @@ from pandas import DataFrame
 from freqtrade.strategy.interface import IStrategy
 
 import talib.abstract as ta
+import freqtrade.vendor.qtpylib.indicators as qtpylib
 
 
 class AlmStrategy(IStrategy):
-
     INTERFACE_VERSION = 3
+
+    can_short: bool = False
 
     minimal_roi = {
         "40": 0.2,
@@ -25,7 +27,7 @@ class AlmStrategy(IStrategy):
     exit_profit_only = False
     ignore_roi_if_entry_signal = False
 
-    startup_candle_count: int = 30
+    startup_candle_count: int = 200
 
     order_types = {
         'entry': 'limit',
@@ -55,25 +57,29 @@ class AlmStrategy(IStrategy):
         }
     }
 
+    # get additional pairs, accessible by the DataProvider
     def informative_pairs(self):
         return []
 
+    # will be executed first
+    # add additional data to entries, used by the buy and sell functions
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        print("populate_indicators ...")
         dataframe['rsi'] = ta.RSI(dataframe)
         return dataframe
 
+    # will be after populate_indicators
+    # funtion to mark entries to buy
     def populate_entry_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        print("populate_entry_trend ...")
         dataframe.loc[
             (
                 (dataframe['rsi'] < 30)
             ),
-            'exit_long'] = 1
+            'enter_long'] = 1
         return dataframe
 
+    # will be after populate_entry_trend
+    # funtion to mark entries to sell
     def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        print("populate_exit_trend ...")
         dataframe.loc[
             (
                 (dataframe['rsi'] > 70)
