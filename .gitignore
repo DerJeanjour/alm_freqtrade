@@ -6,6 +6,7 @@ config*.json
 logfile.txt
 !user_data/strategies/*
 !user_data/notebooks
+!user_data/config.json
 user_data/notebooks/strategy_analysis_example.ipynb
 user_data/models
 user_data/logs/*
